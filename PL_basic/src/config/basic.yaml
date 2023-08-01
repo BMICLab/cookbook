@@ -1,0 +1,51 @@
+seed_everything: 42
+trainer:
+  default_root_dir: null
+  
+  logger:
+    class_path: pytorch_lightning.loggers.WandbLogger
+    init_args:
+      project: # Project Name
+      name: # Run Name
+      save_dir: checkpoints
+
+
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        save_weights_only: False
+        save_top_k: 3
+        filename: '{epoch}-{val_loss:.2f}-{val_acc:.3f}'
+        monitor: 'val_loss'
+        mode: min
+    - class_path: pytorch_lightning.callbacks.LearningRateMonitor
+      init_args:
+        logging_interval: 'epoch'
+
+  enable_checkpointing: true
+  num_sanity_val_steps: 2
+  enable_model_summary: true
+  strategy: 'ddp_find_unused_parameters_true'
+
+  accelerator: gpu
+  devices: # Don't hog all the GPUs..
+    - 0
+    # - 1
+    # - 2
+    # - 3
+
+  log_every_n_steps: 1
+  max_epochs: 100
+
+data:
+  img_fld: 'data/imgs'
+  gt_fld: 'data/labels'
+  batch_size: 1
+  workers: 6
+  
+  batch_size: 1
+
+model:
+  lr: 1e-4
+  
+ckpt_path: null # Use for resumeing and predicting
