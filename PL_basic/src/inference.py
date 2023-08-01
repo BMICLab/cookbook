@@ -10,8 +10,7 @@ from model.model_pl import LitModel
 
 def main(config,ckpt):
     dataset = bmu.autoArgs(config.data, LitDataModule)
-    model = bmu.autoArgs(config.model, LitModel)
-    model.load_from_checkpoint(ckpt)
+    model = LitAEModel.load_from_checkpoint(ckpt)
     
     trainer = pl.Trainer(logger=False)
     pred_out = trainer.predict(model, dataset)
