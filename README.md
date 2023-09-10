@@ -2,6 +2,7 @@
 
 
 ## Run command line
+### Train.py
 `python train.py fit --confing config/basic.yaml`
 
 ### Inference.py
